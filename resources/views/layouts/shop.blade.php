@@ -37,8 +37,10 @@
       <img src="{{ \App\Models\Setting::logoUrl() }}" alt="{{ $site['shop_name'] }}">
       <span><b>{{ $site['shop_name'] }}</b></span>
     </a>
+    <button class="icon-btn search-toggle" type="button" id="searchBtn" aria-label="Search"><svg class="i"><use href="#i-search"/></svg></button>
     <form class="search" action="{{ route('shop') }}" method="get">
       <input type="search" name="q" value="{{ request('q') }}" placeholder="Search products…">
+      <button class="icon-btn search-close" type="button" id="searchClose" aria-label="Close search"><svg class="i"><use href="#i-close"/></svg></button>
       <button class="btn" type="submit" aria-label="Search"><svg class="i"><use href="#i-search"/></svg></button>
     </form>
   </div>
@@ -67,10 +69,13 @@
 (function(){
   var d=document.body;
   function set(o){d.classList.toggle('menu-open',o)}
+  var hdr=document.querySelector('header.top'),sq=hdr.querySelector('.search input');
+  document.getElementById('searchBtn').addEventListener('click',function(){hdr.classList.add('search-open');sq.focus()});
+  document.getElementById('searchClose').addEventListener('click',function(){hdr.classList.remove('search-open')});
   document.getElementById('menuBtn').addEventListener('click',function(){set(true)});
   document.getElementById('overlay').addEventListener('click',function(){set(false)});
   document.querySelectorAll('[data-close]').forEach(function(b){b.addEventListener('click',function(){set(false)})});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){set(false);hdr.classList.remove('search-open')}});
 })();
 </script>
 </body>
