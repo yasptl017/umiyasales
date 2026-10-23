@@ -31,7 +31,7 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         if ($category->products()->exists()) {
-            return back()->withErrors(['category' => "Delete or move this category's products first."]);
+            return back()->withErrors(['category' => "Remove this category from its products (or delete them) first."]);
         }
         $category->delete();
         return back()->with('ok', 'Category deleted.');

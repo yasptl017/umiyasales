@@ -6,7 +6,7 @@
 <title>{{ $site['shop_name'] ?? 'Umiya Sales' }} – {{ $site['tagline'] ?? '' }}</title>
 <meta name="description" content="{{ $site['tagline'] ?? '' }}">
 <link rel="icon" href="{{ \App\Models\Setting::logoUrl() }}">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap">
 <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
 <style>:root{--primary:{{ $site['primary_color'] }};--accent:{{ $site['accent_color'] }}}</style>
 </head>
@@ -31,7 +31,7 @@
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="drawer" aria-label="Menu">
   <div class="drawer-h">
-    <a class="brand" href="{{ route('shop') }}"><img src="{{ \App\Models\Setting::logoUrl() }}" alt=""><span><b>{{ $site['shop_name'] }}</b></span></a>
+    <a class="brand" href="{{ route('shop') }}"><img src="{{ \App\Models\Setting::logoUrl() }}" alt=""><span class="brand-name">@php($w = explode(' ', trim($site['shop_name']), 2))<b class="a">{{ $w[0] }}</b>@if(!empty($w[1]))<b class="b">{{ $w[1] }}</b>@endif</span></a>
     <button class="icon-btn" type="button" data-close aria-label="Close menu"><svg class="i"><use href="#i-close"/></svg></button>
   </div>
   <a class="dnav {{ request()->routeIs('shop') && !request('category') ? 'on' : '' }}" href="{{ route('shop') }}"><svg class="i"><use href="#i-home"/></svg><span>Home</span></a>
@@ -51,7 +51,7 @@
     <button class="icon-btn" type="button" id="menuBtn" aria-label="Open menu" aria-controls="drawer"><svg class="i"><use href="#i-menu"/></svg></button>
     <a class="brand" href="{{ route('shop') }}">
       <img src="{{ \App\Models\Setting::logoUrl() }}" alt="{{ $site['shop_name'] }}">
-      <span><b>{{ $site['shop_name'] }}</b></span>
+      <span class="brand-name">@php($w = explode(' ', trim($site['shop_name']), 2))<b class="a">{{ $w[0] }}</b>@if(!empty($w[1]))<b class="b">{{ $w[1] }}</b>@endif</span>
     </a>
     <button class="icon-btn search-toggle" type="button" id="searchBtn" aria-label="Search"><svg class="i"><use href="#i-search"/></svg></button>
     <form class="search" action="{{ route('shop') }}" method="get">

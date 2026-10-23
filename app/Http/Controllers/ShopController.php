@@ -14,7 +14,7 @@ class ShopController extends Controller
         $slug = $request->query('category');
         $current = $slug ? Category::where('slug', $slug)->firstOrFail() : null;
 
-        $base = Product::visible()->with('category')
+        $base = Product::visible()->with('categories')
             ->when($q !== '', fn ($query) => $query->where('title', 'like', "%{$q}%"));
 
         $today = (clone $base)->where('is_today', true)->orderByDesc('today_at')->get();
@@ -23,7 +23,7 @@ class ShopController extends Controller
 
         if ($current || $q !== '') {
             $products = (clone $base)
-                ->when($current, fn ($query) => $query->where('category_id', $current->id))
+                ->when($current, fn ($query) => $query->whereHas('categories', fn ($c) => $c->where('categories.id', $current->id)))
                 ->orderByRaw("status = 'sold_out'")->latest()->paginate(12)->withQueryString();
             if ($request->ajax()) {
                 return response()->json([
@@ -35,9 +35,9 @@ class ShopController extends Controller
         }
 
         $sections = $categories->map(function ($c) use ($base) {
-            $c->setRelation('products', (clone $base)->where('category_id', $c->id)
+            $c->setRelation('products', (clone $base)->whereHas('categories', fn ($q) => $q->where('categories.id', $c->id))
                 ->orderByRaw("status = 'sold_out'")->latest()->limit(8)->get());
-            $c->total = (clone $base)->where('category_id', $c->id)->count();
+            $c->total = (clone $base)->whereHas('categories', fn ($q) => $q->where('categories.id', $c->id))->count();
             return $c;
         })->filter(fn ($c) => $c->products->isNotEmpty());
 

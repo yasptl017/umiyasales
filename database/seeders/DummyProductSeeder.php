@@ -41,6 +41,9 @@ class DummyProductSeeder extends Seeder
             ['beauty', 'Philips Beard Trimmer BT1235 Cordless', 1495, 899, 'available', false, true],
         ];
 
+        // products shown in a second category too
+        $extra = ['Philips Beard Trimmer BT1235 Cordless' => $cats['electronics'], 'Milton Thermosteel Flask 1000 ml' => $cats['beauty']];
+
         $palette = [['#0a5bd6', '#e8f0ff'], ['#ff8a00', '#fff1de'], ['#16a34a', '#e3f7ea'], ['#7c3aed', '#efe7ff'], ['#e8340c', '#ffe9e3'], ['#0891b2', '#e0f6fb']];
 
         Storage::disk('public')->makeDirectory('products');
@@ -58,8 +61,7 @@ SVG;
             $path = 'products/demo-' . ($i + 1) . '.svg';
             Storage::disk('public')->put($path, $svg);
 
-            Product::create([
-                'category_id' => $cats[$slug],
+            $p = Product::create([
                 'title' => $title,
                 'image' => $path,
                 'product_url' => $link ? 'https://www.amazon.in/dp/DEMO' . str_pad((string) ($i + 1), 4, '0', STR_PAD_LEFT) : null,
@@ -69,6 +71,7 @@ SVG;
                 'is_today' => $today,
                 'today_at' => $today ? now()->subMinutes($i) : null,
             ]);
+            $p->categories()->sync(array_filter([$cats[$slug], $extra[$title] ?? null]));
         }
     }
 }

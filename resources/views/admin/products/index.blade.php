@@ -22,7 +22,7 @@
     <tr>
       <td class="c-img">@if($p->image_url)<img class="thumb" src="{{ $p->image_url }}" alt="">@endif</td>
       <td class="c-title"><b>{{ \Illuminate\Support\Str::limit($p->title, 60) }}</b><br>
-        <small style="color:var(--muted)">{{ $p->category->name }}</small>
+        <small style="color:var(--muted)">{{ $p->categories->pluck('name')->join(', ') }}</small>
         @if($p->is_today)<span class="tag today">Today's Upload</span>@endif</td>
       <td data-l="Price">₹{{ number_format($p->price, 0) }} @if($p->mrp)<small style="color:var(--muted)"><s>₹{{ number_format($p->mrp, 0) }}</s> ({{ $p->discount }}%)</small>@endif</td>
       <td data-l="Status">

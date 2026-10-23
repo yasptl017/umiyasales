@@ -13,10 +13,10 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $products = Product::with('category')
+        $products = Product::with('categories')
             ->when($request->filled('q'), fn ($q) => $q->where('title', 'like', '%' . $request->q . '%'))
             ->when($request->filled('status'), fn ($q) => $q->where('status', $request->status))
-            ->when($request->filled('category'), fn ($q) => $q->where('category_id', $request->category))
+            ->when($request->filled('category'), fn ($q) => $q->whereHas('categories', fn ($c) => $c->where('categories.id', $request->category)))
             ->latest()->paginate(20)->withQueryString();
 
         return view('admin.products.index', [
@@ -33,8 +33,10 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $this->validated($request, true);
+        $ids = $data['category_ids'];
+        unset($data['category_ids']);
         $this->applyToday($data);
-        Product::create($data);
+        Product::create($data)->categories()->sync($ids);
         return redirect()->route('admin.products.index')->with('ok', 'Product added.');
     }
 
@@ -46,11 +48,14 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $data = $this->validated($request, false);
+        $ids = $data['category_ids'];
+        unset($data['category_ids']);
         if (isset($data['image']) && $product->image) {
             Storage::disk('public')->delete($product->image);
         }
         $this->applyToday($data, $product);
         $product->update($data);
+        $product->categories()->sync($ids);
         return redirect()->route('admin.products.index')->with('ok', 'Product updated.');
     }
 
@@ -79,7 +84,8 @@ class ProductController extends Controller
     private function validated(Request $request, bool $imageRequired): array
     {
         $data = $request->validate([
-            'category_id' => 'required|exists:categories,id',
+            'category_ids' => 'required|array|min:1',
+            'category_ids.*' => 'integer|exists:categories,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:2000',
             'product_url' => 'nullable|url|max:2000',

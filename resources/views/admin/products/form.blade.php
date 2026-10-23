@@ -8,11 +8,14 @@
 
   <div class="fld"><label>Title *</label><input type="text" name="title" value="{{ old('title', $product->title) }}" required></div>
   <div class="f2">
-    <div class="fld"><label>Category *</label>
-      <select name="category_id" required>
-        <option value="">Select…</option>
-        @foreach($categories as $c)<option value="{{ $c->id }}" @selected(old('category_id', $product->category_id) == $c->id)>{{ $c->name }}</option>@endforeach
-      </select>
+    <div class="fld"><label>Categories *</label>
+      @php($sel = collect(old('category_ids', $product->exists ? $product->categories->pluck('id')->all() : [])))
+      <div class="checks">
+        @foreach($categories as $c)
+          <label class="check"><input type="checkbox" name="category_ids[]" value="{{ $c->id }}" @checked($sel->contains($c->id))> {{ $c->name }}</label>
+        @endforeach
+      </div>
+      <div class="hint">Tick one or more. The product appears under every selected category.</div>
       @if($categories->isEmpty())<div class="err">Add a category first.</div>@endif
     </div>
     <div class="fld"><label>Status *</label>

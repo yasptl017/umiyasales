@@ -3,20 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
     public const STATUSES = ['available' => 'Available', 'sold_out' => 'Sold Out', 'unavailable' => 'Unavailable'];
 
-    protected $fillable = ['category_id', 'title', 'description', 'image', 'product_url', 'mrp', 'price', 'status', 'is_today', 'today_at'];
+    protected $fillable = ['title', 'description', 'image', 'product_url', 'mrp', 'price', 'status', 'is_today', 'today_at'];
 
     protected $casts = ['is_today' => 'boolean', 'today_at' => 'datetime', 'mrp' => 'float', 'price' => 'float'];
 
-    public function category(): BelongsTo
+    public function categories(): BelongsToMany
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class);
     }
 
     public function scopeVisible($q)
