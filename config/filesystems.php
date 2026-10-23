@@ -40,8 +40,9 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            // Written straight into public/storage so no symlink (storage:link) is needed on shared hosting.
+            'root' => public_path('storage'),
+            'url' => '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
