@@ -22,6 +22,10 @@
     </div>
   </div>
   <div class="lb-stage" id="lbStage"><img id="lbImg" alt="" draggable="false"></div>
+  <div class="lb-price" id="lbPrice" hidden>
+    <span class="lb-label">Our price</span>
+    <b id="lbP"></b><s id="lbM"></s><em id="lbO"></em>
+  </div>
   <div class="lb-hint">Double-tap or scroll to zoom · drag to move</div>
 </div>
 <div class="overlay" id="overlay"></div>
@@ -83,12 +87,12 @@
   var sc=1,x=0,y=0,pts={},pd=0,drag=null;
   function apply(){im.style.transform='translate('+x+'px,'+y+'px) scale('+sc+')';st.classList.toggle('zoomed',sc>1)}
   function zoom(n){sc=Math.min(5,Math.max(1,n));if(sc===1){x=0;y=0}apply()}
-  function open(src,t){im.src=src;ti.textContent=t||'';sc=1;x=0;y=0;apply();lb.hidden=false;document.body.classList.add('lb-open')}
+  function open(src,t,d){d=d||{};im.src=src;ti.textContent=t||'';var pr=document.getElementById('lbPrice');pr.hidden=!d.price;document.getElementById('lbP').textContent=d.price||'';var m=document.getElementById('lbM'),o=document.getElementById('lbO');m.textContent=d.mrp||'';m.hidden=!d.mrp;o.textContent=d.off||'';o.hidden=!d.off;if(d.sold){o.hidden=false;o.textContent='SOLD OUT';o.className='sold'}else{o.className=''}sc=1;x=0;y=0;apply();lb.hidden=false;document.body.classList.add('lb-open')}
   function close(){lb.hidden=true;document.body.classList.remove('lb-open');im.removeAttribute('src')}
-  document.addEventListener('click',function(e){var z=e.target.closest('[data-zoom]');if(z){e.preventDefault();open(z.dataset.zoom,z.dataset.title)}});
+  document.addEventListener('click',function(e){var z=e.target.closest('[data-zoom]');if(z){e.preventDefault();open(z.dataset.zoom,z.dataset.title,z.dataset)}});
   document.addEventListener('keydown',function(e){
     var z=e.target.closest&&e.target.closest('[data-zoom]');
-    if(z&&(e.key==='Enter'||e.key===' ')){e.preventDefault();open(z.dataset.zoom,z.dataset.title)}
+    if(z&&(e.key==='Enter'||e.key===' ')){e.preventDefault();open(z.dataset.zoom,z.dataset.title,z.dataset)}
     if(!lb.hidden){if(e.key==='Escape')close();if(e.key==='+'||e.key==='=')zoom(sc+.5);if(e.key==='-')zoom(sc-.5)}
   });
   document.getElementById('lbClose').onclick=close;

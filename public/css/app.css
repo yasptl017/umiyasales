@@ -351,3 +351,12 @@ th{background:#f8fafd}
 .lb-stage img{max-width:96%;max-height:100%;object-fit:contain;background:#fff;border-radius:10px;transform-origin:center;transition:transform .12s ease-out;will-change:transform}
 .lb-hint{text-align:center;color:#9fb0d4;font-size:12px;padding:8px}
 body.lb-open{overflow:hidden}
+
+.lb-price{display:flex;align-items:baseline;justify-content:center;gap:10px;flex-wrap:wrap;padding:10px 16px 4px;color:#fff}
+.lb-price[hidden]{display:none}
+.lb-label{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:#9fb0d4}
+.lb-price b{font-size:28px;font-weight:800}
+.lb-price s{color:#9fb0d4;font-size:16px}
+.lb-price em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--red));color:#fff;font-weight:700;font-size:13px;padding:3px 10px;border-radius:99px}
+.lb-price em.sold{background:#475569}
+.lb-price [hidden]{display:none}

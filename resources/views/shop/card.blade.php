@@ -1,5 +1,14 @@
+@php
+  $zoomAttrs = '';
+  if ($p->image_url) {
+      $a = ['data-zoom' => $p->image_url, 'data-title' => $p->title, 'data-price' => '₹'.number_format($p->price, 0), 'role' => 'button', 'tabindex' => '0', 'aria-label' => 'View photo of '.$p->title];
+      if ($p->mrp && $p->mrp > $p->price) { $a['data-mrp'] = '₹'.number_format($p->mrp, 0); $a['data-off'] = $p->discount.'% OFF'; }
+      if ($p->sold_out) { $a['data-sold'] = '1'; }
+      foreach ($a as $k => $v) { $zoomAttrs .= ' '.$k.'="'.e($v).'"'; }
+  }
+@endphp
 <div class="card {{ $p->sold_out ? 'sold' : '' }}">
-  <div class="img"@if($p->image_url) data-zoom="{{ $p->image_url }}" data-title="{{ $p->title }}" role="button" tabindex="0" aria-label="View photo of {{ $p->title }}"@endif>
+  <div class="img"{!! $zoomAttrs !!}>
     @if($p->image_url)<img src="{{ $p->image_url }}" alt="{{ $p->title }}" loading="lazy">@endif
     @if($p->discount > 0)<span class="badge">{{ $p->discount }}% OFF</span>@endif
     @if($p->is_today && !$p->sold_out)<span class="badge new">NEW</span>@endif
