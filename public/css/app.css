@@ -334,3 +334,20 @@ th{background:#f8fafd}
   .search-close{display:inline-flex;order:3}
   .chips{top:61px}
 }
+
+/* fixed-size product photo + zoom */
+.card .img{aspect-ratio:1/1;height:auto;overflow:hidden;position:relative}
+.card .img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8px}
+.card .img[data-zoom]{cursor:zoom-in}
+.card .img .badge,.card .img .sold-tag{pointer-events:none}
+.lb{position:fixed;inset:0;z-index:100;background:rgba(8,15,35,.94);display:flex;flex-direction:column}
+.lb[hidden]{display:none}
+.lb-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;color:#fff}
+.lb-title{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-tools{display:flex;gap:8px;flex:none}
+.lb-tools .icon-btn{font-size:24px;font-weight:600}
+.lb-stage{flex:1;overflow:hidden;display:flex;align-items:center;justify-content:center;touch-action:none;cursor:zoom-in;user-select:none}
+.lb-stage.zoomed{cursor:grab}
+.lb-stage img{max-width:96%;max-height:100%;object-fit:contain;background:#fff;border-radius:10px;transform-origin:center;transition:transform .12s ease-out;will-change:transform}
+.lb-hint{text-align:center;color:#9fb0d4;font-size:12px;padding:8px}
+body.lb-open{overflow:hidden}

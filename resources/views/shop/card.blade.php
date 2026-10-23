@@ -1,5 +1,5 @@
 <div class="card {{ $p->sold_out ? 'sold' : '' }}">
-  <div class="img">
+  <div class="img"@if($p->image_url) data-zoom="{{ $p->image_url }}" data-title="{{ $p->title }}" role="button" tabindex="0" aria-label="View photo of {{ $p->title }}"@endif>
     @if($p->image_url)<img src="{{ $p->image_url }}" alt="{{ $p->title }}" loading="lazy">@endif
     @if($p->discount > 0)<span class="badge">{{ $p->discount }}% OFF</span>@endif
     @if($p->is_today && !$p->sold_out)<span class="badge new">NEW</span>@endif
