@@ -1,0 +1,21 @@
+# Use this file when the whole Laravel project is uploaded into public_html.
+# It sends every request to the /public folder and blocks hidden files (.env, .git ...).
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Block hidden files/folders such as .env, .git (allow .well-known for SSL)
+    RewriteRule (^|/)\.(?!well-known/) - [F,L]
+
+    # Everything else is served from /public
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<FilesMatch "\.(env|log|lock|json|md|xml|yml|yaml|ini|sh)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>

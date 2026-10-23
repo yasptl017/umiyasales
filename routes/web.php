@@ -14,6 +14,13 @@ Route::get('/go/whatsapp', function () {
     return $url ? redirect()->away($url) : redirect()->route('shop');
 })->name('go.whatsapp');
 
+// Fallback for hosts where `php artisan storage:link` (public/storage symlink) isn't available.
+// When the symlink exists the web server serves files directly and this route is never hit.
+Route::get('/storage/{path}', function (string $path) {
+    abort_unless(\Illuminate\Support\Facades\Storage::disk('public')->exists($path), 404);
+    return \Illuminate\Support\Facades\Storage::disk('public')->response($path);
+})->where('path', '.*');
+
 Route::view('/contact', 'shop.contact')->name('contact');
 Route::view('/social', 'shop.social')->name('social');
 
