@@ -3,6 +3,7 @@
   if ($p->image_url) {
       $a = ['data-zoom' => $p->image_url, 'data-title' => $p->title, 'data-price' => '₹'.number_format($p->price, 0), 'role' => 'button', 'tabindex' => '0', 'aria-label' => 'View photo of '.$p->title];
       if ($p->mrp && $p->mrp > $p->price) { $a['data-mrp'] = '₹'.number_format($p->mrp, 0); $a['data-off'] = $p->discount.'% OFF'; }
+      if (count($p->gallery) > 1) { $a['data-gallery'] = json_encode($p->gallery); }
       if ($p->sold_out) { $a['data-sold'] = '1'; }
       foreach ($a as $k => $v) { $zoomAttrs .= ' '.$k.'="'.e($v).'"'; }
   }

@@ -22,6 +22,9 @@
     </div>
   </div>
   <div class="lb-stage" id="lbStage"><img id="lbImg" alt="" draggable="false"></div>
+  <button type="button" class="lb-nav prev" id="lbPrev" aria-label="Previous photo" hidden>&#8249;</button>
+  <button type="button" class="lb-nav next" id="lbNext" aria-label="Next photo" hidden>&#8250;</button>
+  <div class="lb-count" id="lbCount" hidden></div>
   <div class="lb-price" id="lbPrice" hidden>
     <span class="lb-label">Our price</span>
     <b id="lbP"></b><s id="lbM"></s><em id="lbO"></em>
@@ -88,15 +91,23 @@
   var sc=1,x=0,y=0,pts={},pd=0,drag=null;
   function apply(){im.style.transform='translate('+x+'px,'+y+'px) scale('+sc+')';st.classList.toggle('zoomed',sc>1)}
   function zoom(n){sc=Math.min(5,Math.max(1,n));if(sc===1){x=0;y=0}apply()}
-  function open(src,t,d){d=d||{};im.src=src;ti.textContent=t||'';var pr=document.getElementById('lbPrice');pr.hidden=!d.price;document.getElementById('lbP').textContent=d.price||'';var m=document.getElementById('lbM'),o=document.getElementById('lbO');m.textContent=d.mrp||'';m.hidden=!d.mrp;o.textContent=d.off||'';o.hidden=!d.off;if(d.sold){o.hidden=false;o.textContent='SOLD OUT';o.className='sold'}else{o.className=''}sc=1;x=0;y=0;apply();lb.hidden=false;document.body.classList.add('lb-open')}
+  var gal=[],gi=0;
+  function show(i){gi=(i+gal.length)%gal.length;im.src=gal[gi];sc=1;x=0;y=0;apply();document.getElementById('lbCount').textContent=(gi+1)+' / '+gal.length}
+  function open(src,t,d){d=d||{};gal=[];try{gal=d.gallery?JSON.parse(d.gallery):[]}catch(e){}
+    gi=gal.indexOf(src);if(gi<0)gal=[];
+    var multi=gal.length>1;['lbPrev','lbNext','lbCount'].forEach(function(k){document.getElementById(k).hidden=!multi});
+    if(multi)document.getElementById('lbCount').textContent=(gi+1)+' / '+gal.length;
+    im.src=src;ti.textContent=t||'';var pr=document.getElementById('lbPrice');pr.hidden=!d.price;document.getElementById('lbP').textContent=d.price||'';var m=document.getElementById('lbM'),o=document.getElementById('lbO');m.textContent=d.mrp||'';m.hidden=!d.mrp;o.textContent=d.off||'';o.hidden=!d.off;if(d.sold){o.hidden=false;o.textContent='SOLD OUT';o.className='sold'}else{o.className=''}sc=1;x=0;y=0;apply();lb.hidden=false;document.body.classList.add('lb-open')}
   function close(){lb.hidden=true;document.body.classList.remove('lb-open');im.removeAttribute('src')}
   document.addEventListener('click',function(e){var z=e.target.closest('[data-zoom]');if(z){e.preventDefault();open(z.dataset.zoom,z.dataset.title,z.dataset)}});
   document.addEventListener('keydown',function(e){
     var z=e.target.closest&&e.target.closest('[data-zoom]');
     if(z&&(e.key==='Enter'||e.key===' ')){e.preventDefault();open(z.dataset.zoom,z.dataset.title,z.dataset)}
-    if(!lb.hidden){if(e.key==='Escape')close();if(e.key==='+'||e.key==='=')zoom(sc+.5);if(e.key==='-')zoom(sc-.5)}
+    if(!lb.hidden){if(e.key==='Escape')close();if(gal.length>1){if(e.key==='ArrowRight')show(gi+1);if(e.key==='ArrowLeft')show(gi-1)}if(e.key==='+'||e.key==='=')zoom(sc+.5);if(e.key==='-')zoom(sc-.5)}
   });
   document.getElementById('lbClose').onclick=close;
+  document.getElementById('lbPrev').onclick=function(){show(gi-1)};
+  document.getElementById('lbNext').onclick=function(){show(gi+1)};
   document.getElementById('lbIn').onclick=function(){zoom(sc+.75)};
   document.getElementById('lbOut').onclick=function(){zoom(sc-.75)};
   st.addEventListener('click',function(e){if(e.target===st&&!drag)close()});
@@ -108,7 +119,7 @@
   st.addEventListener('pointermove',function(e){if(!pts[e.pointerId])return;pts[e.pointerId]=e;var k=Object.keys(pts);
     if(k.length===2){var d=Math.hypot(pts[k[0]].clientX-pts[k[1]].clientX,pts[k[0]].clientY-pts[k[1]].clientY);if(pd)zoom(sc*d/pd);pd=d;if(drag)drag.moved=true;return}
     if(drag&&sc>1){x=drag.ox+e.clientX-drag.sx;y=drag.oy+e.clientY-drag.sy;drag.moved=true;apply()}});
-  function up(e){delete pts[e.pointerId];pd=0;setTimeout(function(){drag=null},0)}
+  function up(e){if(drag&&e.type==='pointerup'&&sc===1&&gal.length>1&&Object.keys(pts).length===1){var dx=e.clientX-drag.sx;if(Math.abs(dx)>50&&Math.abs(e.clientY-drag.sy)<80)show(gi+(dx<0?1:-1))}delete pts[e.pointerId];pd=0;setTimeout(function(){drag=null},0)}
   st.addEventListener('pointerup',up);st.addEventListener('pointercancel',up);
   // double-tap on touch screens
   var lt=0;st.addEventListener('touchend',function(e){var n=Date.now();if(n-lt<300&&e.touches.length===0){zoom(sc>1?1:2.5)}lt=n});

@@ -35,6 +35,17 @@
     <input type="file" name="image" accept="image/*" {{ $product->exists ? '' : 'required' }}>
     @if($product->image_url)<img class="preview" src="{{ $product->image_url }}" alt="">@endif
   </div>
+  <div class="fld"><label>More photos <span style="font-weight:400;color:var(--muted)">(optional, select several)</span></label>
+    <input type="file" name="gallery[]" accept="image/*" multiple>
+    <div class="hint">Shown after the main image. Customers can flip between photos.</div>
+    @if($product->exists && $product->images->isNotEmpty())
+      <div class="checks" style="margin-top:8px">
+        @foreach($product->images as $img)
+          <label class="check"><img class="preview" style="width:80px;height:80px;object-fit:cover;margin:0" src="{{ $img->url }}" alt=""><br><input type="checkbox" name="remove_images[]" value="{{ $img->id }}"> Remove</label>
+        @endforeach
+      </div>
+    @endif
+  </div>
   <div class="fld"><label>Description (optional)</label><textarea name="description">{{ old('description', $product->description) }}</textarea></div>
   <div class="fld"><label style="font-weight:600"><input type="checkbox" name="is_today" value="1" @checked(old('is_today', $product->is_today))> Show at top as “Today's Upload”</label></div>
 

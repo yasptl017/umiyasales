@@ -36,7 +36,9 @@ class ProductController extends Controller
         $ids = $data['category_ids'];
         unset($data['category_ids']);
         $this->applyToday($data);
-        Product::create($data)->categories()->sync($ids);
+        $product = Product::create($data);
+        $product->categories()->sync($ids);
+        $this->saveGallery($request, $product);
         return redirect()->route('admin.products.index')->with('ok', 'Product added.');
     }
 
@@ -56,6 +58,11 @@ class ProductController extends Controller
         $this->applyToday($data, $product);
         $product->update($data);
         $product->categories()->sync($ids);
+        foreach ($product->images()->whereIn('id', (array) $request->input('remove_images', []))->get() as $img) {
+            Storage::disk('public')->delete($img->path);
+            $img->delete();
+        }
+        $this->saveGallery($request, $product);
         return redirect()->route('admin.products.index')->with('ok', 'Product updated.');
     }
 
@@ -74,11 +81,22 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        foreach ($product->images as $img) {
+            Storage::disk('public')->delete($img->path);
+        }
         if ($product->image) {
             Storage::disk('public')->delete($product->image);
         }
         $product->delete();
         return back()->with('ok', 'Product deleted.');
+    }
+
+    private function saveGallery(Request $request, Product $product): void
+    {
+        $order = (int) $product->images()->max('sort_order');
+        foreach ((array) $request->file('gallery', []) as $file) {
+            $product->images()->create(['path' => $file->store('products', 'public'), 'sort_order' => ++$order]);
+        }
     }
 
     private function validated(Request $request, bool $imageRequired): array
@@ -92,8 +110,11 @@ class ProductController extends Controller
             'mrp' => 'nullable|numeric|min:1',
             'price' => ['required', 'numeric', 'min:0', Rule::when($request->filled('mrp'), 'lte:mrp')],
             'status' => ['required', Rule::in(array_keys(Product::STATUSES))],
+            'gallery' => 'nullable|array|max:10',
+            'gallery.*' => 'image|max:5120',
             'image' => ($imageRequired ? 'required' : 'nullable') . '|image|max:5120',
         ]);
+        unset($data['gallery']);
         $data['is_today'] = $request->boolean('is_today');
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('products', 'public');

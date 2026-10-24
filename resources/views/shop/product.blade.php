@@ -6,7 +6,7 @@
   <div class="pd">
     <div class="pd-img"
       @if($product->image_url)
-        data-zoom="{{ $product->image_url }}" data-title="{{ $product->title }}" data-price="₹{{ number_format($product->price, 0) }}"
+        id="pdMain" data-zoom="{{ $product->image_url }}" @if(count($product->gallery) > 1) data-gallery="{{ json_encode($product->gallery) }}" @endif data-title="{{ $product->title }}" data-price="₹{{ number_format($product->price, 0) }}"
         @if($hasMrp) data-mrp="₹{{ number_format($product->mrp, 0) }}" data-off="{{ $product->discount }}% OFF" @endif
         @if($product->sold_out) data-sold="1" @endif
         role="button" tabindex="0" aria-label="Zoom photo of {{ $product->title }}"
@@ -15,6 +15,11 @@
       @if($hasMrp)<span class="badge">{{ $product->discount }}% OFF</span>@endif
       @if($product->sold_out)<div class="sold-tag"><span>SOLD OUT</span></div>@endif
     </div>
+    @if(count($product->gallery) > 1)
+    <div class="pd-thumbs" id="pdThumbs">
+      @foreach($product->gallery as $i => $g)<button type="button" class="{{ $i === 0 ? 'on' : '' }}" data-i="{{ $i }}" aria-label="Photo {{ $i + 1 }}"><img src="{{ $g }}" alt=""></button>@endforeach
+    </div>
+    @endif
     <div class="pd-info">
       <h1>{{ $product->title }}</h1>
       <div class="pd-price">
@@ -42,4 +47,14 @@
   </div>
   @endif
 </div>
+@if(count($product->gallery) > 1)
+<script>
+(function(){
+  var m=document.getElementById('pdMain'),im=m.querySelector('img'),g=JSON.parse(m.dataset.gallery),t=document.querySelectorAll('#pdThumbs button');
+  t.forEach(function(b){b.addEventListener('click',function(){
+    var i=+b.dataset.i;im.src=g[i];m.dataset.zoom=g[i];
+    t.forEach(function(x){x.classList.toggle('on',x===b)})})});
+})();
+</script>
+@endif
 @endsection

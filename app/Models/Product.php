@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
@@ -13,6 +14,19 @@ class Product extends Model
     protected $fillable = ['title', 'description', 'image', 'product_url', 'mrp', 'price', 'status', 'is_today', 'today_at'];
 
     protected $casts = ['is_today' => 'boolean', 'today_at' => 'datetime', 'mrp' => 'float', 'price' => 'float'];
+
+    protected $with = ['images'];
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    /** Cover photo first, then the extra photos. */
+    public function getGalleryAttribute(): array
+    {
+        return array_values(array_filter(array_merge([$this->image_url], $this->images->map->url->all())));
+    }
 
     public function categories(): BelongsToMany
     {
