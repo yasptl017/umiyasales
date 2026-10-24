@@ -19,7 +19,7 @@ class ShopController extends Controller
 
         $today = (clone $base)->where('is_today', true)->orderByDesc('today_at')->get();
 
-        $categories = Category::orderBy('sort_order')->orderBy('name')->get();
+        $categories = Category::withCount(['products' => fn ($q) => $q->visible()])->orderBy('sort_order')->orderBy('name')->get();
 
         if ($current || $q !== '') {
             $products = (clone $base)

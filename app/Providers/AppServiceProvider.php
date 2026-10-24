@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\View::composer(['layouts.*', 'shop.*', 'admin.*'], function ($view) {
             $view->with('site', \App\Models\Setting::all_());
             if ($view->name() === 'layouts.shop') {
-                $view->with('menuCategories', \App\Models\Category::orderBy('sort_order')->orderBy('name')->get(['name', 'slug']));
+                $view->with('menuCategories', \App\Models\Category::withCount(['products' => fn ($q) => $q->visible()])->orderBy('sort_order')->orderBy('name')->get());
             }
         });
     }

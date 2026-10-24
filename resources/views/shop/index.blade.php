@@ -24,7 +24,7 @@
   <nav class="chips">
     <a class="chip {{ !$current ? 'on' : '' }}" href="{{ route('shop') }}">All</a>
     @foreach($categories as $c)
-      <a class="chip {{ $current && $current->id === $c->id ? 'on' : '' }}" href="{{ route('shop', ['category' => $c->slug]) }}">{{ $c->name }}</a>
+      <a class="chip {{ $current && $current->id === $c->id ? 'on' : '' }}" href="{{ route('shop', ['category' => $c->slug]) }}">{{ $c->name }} <span class="cnt">({{ $c->products_count }})</span></a>
     @endforeach
   </nav>
 

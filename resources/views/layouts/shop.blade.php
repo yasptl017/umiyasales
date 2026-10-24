@@ -40,7 +40,7 @@
   @if(!empty($menuCategories) && $menuCategories->isNotEmpty())
     <div class="dlabel">Categories</div>
     @foreach($menuCategories as $mc)
-      <a class="dnav sub {{ request('category') === $mc->slug ? 'on' : '' }}" href="{{ route('shop', ['category' => $mc->slug]) }}">{{ $mc->name }}</a>
+      <a class="dnav sub {{ request('category') === $mc->slug ? 'on' : '' }}" href="{{ route('shop', ['category' => $mc->slug]) }}">{{ $mc->name }} <span class="cnt">({{ $mc->products_count }})</span></a>
     @endforeach
   @endif
   <a class="btn wa" style="margin:16px" href="{{ \App\Models\Setting::whatsappUrl('Hi '.$site['contact_person'].', I have a query.') }}" target="_blank" rel="noopener">Chat on WhatsApp</a>

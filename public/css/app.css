@@ -394,3 +394,5 @@ body.lb-open{overflow:hidden}
 .pd-info .btn+.btn{margin-top:10px}
 .pd-rel{padding-bottom:30px}
 @media(max-width:760px){.pd{grid-template-columns:1fr;gap:16px}.pd-info h1{font-size:21px}}
+
+.cnt{opacity:.7;font-weight:500;font-size:.9em}
