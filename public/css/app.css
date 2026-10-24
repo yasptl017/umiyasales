@@ -396,3 +396,10 @@ body.lb-open{overflow:hidden}
 @media(max-width:760px){.pd{grid-template-columns:1fr;gap:16px}.pd-info h1{font-size:21px}}
 
 .cnt{opacity:.7;font-weight:500;font-size:.9em}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:18px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;gap:14px;align-items:center}
+.stat .ico{width:46px;height:46px;border-radius:12px;background:#eaf1fd;color:var(--primary);display:flex;align-items:center;justify-content:center;flex:none}
+.stat small{display:block;color:var(--muted);font-size:13px}
+.stat b{font-size:26px;font-family:Poppins,Inter,sans-serif}
+.stat em{display:block;font-style:normal;color:var(--muted);font-size:12px;margin-top:2px}

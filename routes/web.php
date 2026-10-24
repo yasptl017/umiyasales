@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\ShopController;
@@ -30,7 +31,8 @@ Route::get('/admin/login', [AuthController::class, 'showLogin'])->name('login')-
 Route::post('/admin/login', [AuthController::class, 'login'])->middleware(['guest', 'throttle:10,1']);
 
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
-    Route::redirect('/', '/admin/products');
+    Route::redirect('/', '/admin/dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('password', [AuthController::class, 'password'])->name('password');
 

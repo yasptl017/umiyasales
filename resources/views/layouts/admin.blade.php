@@ -15,10 +15,11 @@
 <div class="adm" id="adm">
   <div class="overlay" id="overlay"></div>
   <aside class="side">
-    <a class="brand" href="{{ route('admin.products.index') }}">
+    <a class="brand" href="{{ route('admin.dashboard') }}">
       <img src="{{ \App\Models\Setting::logoUrl() }}" alt="">
       <span><b>{{ $site['shop_name'] }}</b><small>Admin Panel</small></span>
     </a>
+    <a class="nav {{ request()->routeIs('admin.dashboard') ? 'on' : '' }}" href="{{ route('admin.dashboard') }}"><svg class="i"><use href="#i-home"/></svg><span>Dashboard</span></a>
     <a class="nav {{ request()->routeIs('admin.products.*') ? 'on' : '' }}" href="{{ route('admin.products.index') }}"><svg class="i"><use href="#i-box"/></svg><span>Products</span></a>
     <a class="nav {{ request()->routeIs('admin.categories.*') ? 'on' : '' }}" href="{{ route('admin.categories.index') }}"><svg class="i"><use href="#i-folder"/></svg><span>Categories</span></a>
     <a class="nav {{ request()->routeIs('admin.settings') ? 'on' : '' }}" href="{{ route('admin.settings') }}"><svg class="i"><use href="#i-settings"/></svg><span>Settings</span></a>

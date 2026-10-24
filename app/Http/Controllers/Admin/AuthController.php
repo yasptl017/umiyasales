@@ -19,7 +19,7 @@ class AuthController extends Controller
         $cred = $request->validate(['email' => 'required|email', 'password' => 'required']);
         if (Auth::attempt($cred, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended(route('admin.products.index'));
+            return redirect()->intended(route('admin.dashboard'));
         }
         return back()->withErrors(['email' => 'Invalid email or password.'])->onlyInput('email');
     }
