@@ -47,11 +47,11 @@ class Product extends Model
     public function whatsappUrl(): string
     {
         $tpl = Setting::get('whatsapp_message');
-        if (! $this->mrp) {
-            $tpl = preg_replace('/\s*\([^()
+        // MRP is intentionally never sent on WhatsApp: strip "(MRP {mrp})" and any bare {mrp}.
+        $tpl = preg_replace('/\s*\([^()
 ]*\{mrp\}[^()
 ]*\)/u', '', $tpl);
-        }
+        $tpl = str_replace('{mrp}', '', $tpl);
         if (! $this->product_url) {
             $tpl = preg_replace('/^[^
 ]*\{link\}[^
@@ -63,7 +63,6 @@ class Product extends Model
             '{shop}' => Setting::get('shop_name'),
             '{product}' => $this->title,
             '{price}' => number_format($this->price, 0),
-            '{mrp}' => number_format((float) $this->mrp, 0),
             '{link}' => (string) $this->product_url,
         ]);
         $text .= "

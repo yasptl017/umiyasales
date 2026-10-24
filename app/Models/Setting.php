@@ -21,7 +21,7 @@ class Setting extends Model
         'country_code' => '91',
         'phone' => '9998881524',
         'whatsapp_group' => 'https://chat.whatsapp.com/LOMmANNLstK1hbmT38PpzC',
-        'whatsapp_message' => "Hi {contact}, I want to buy this product from {shop}:\n\n{product}\nPrice: ₹{price} (MRP ₹{mrp})\n{link}",
+        'whatsapp_message' => "Hi {contact}, I want to buy this product from {shop}:\n\n{product}\nPrice: ₹{price}\n{link}",
         'primary_color' => '#0a5bd6',
         'accent_color' => '#ff8a00',
         'footer_text' => 'Genuine Amazon & Flipkart deals. Message us on WhatsApp to order.',

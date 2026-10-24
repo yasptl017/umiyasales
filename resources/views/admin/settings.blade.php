@@ -28,7 +28,7 @@
   <div class="fld"><label>WhatsApp group link</label><input type="url" name="whatsapp_group" value="{{ old('whatsapp_group', $s['whatsapp_group']) }}"></div>
   <div class="fld"><label>Buy-button message *</label>
     <textarea name="whatsapp_message" required>{{ old('whatsapp_message', $s['whatsapp_message']) }}</textarea>
-    <div class="hint">Placeholders: {contact} {shop} {product} {price} {mrp} {link}. {link} is the Amazon/Flipkart product URL. Lines with {link} and the “(…{mrp}…)” part are dropped automatically when a product has no link or MRP.</div>
+    <div class="hint">Placeholders: {contact} {shop} {product} {price} {link}. {link} is the Amazon/Flipkart product URL. The line with {link} is dropped when a product has no link. MRP is never sent on WhatsApp.</div>
   </div>
   <div class="f2">
     <div class="fld"><label>Email (shown on Contact page)</label><input type="email" name="email" value="{{ old('email', $s['email']) }}"></div>
