@@ -43,4 +43,16 @@ class ShopController extends Controller
 
         return view('shop.index', compact('today', 'categories', 'current', 'q', 'sections') + ['products' => null]);
     }
+
+    public function show(Product $product)
+    {
+        abort_if($product->status === 'unavailable', 404);
+        $product->load('categories');
+        $catIds = $product->categories->pluck('id');
+        $related = Product::visible()->where('id', '!=', $product->id)
+            ->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $catIds))
+            ->latest()->limit(4)->get();
+
+        return view('shop.product', compact('product', 'related'));
+    }
 }

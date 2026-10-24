@@ -15,7 +15,7 @@
     @if($p->sold_out)<div class="sold-tag"><span>SOLD OUT</span></div>@endif
   </div>
   <div class="body">
-    <h3 title="{{ $p->title }}">{{ $p->title }}</h3>
+    <h3 title="{{ $p->title }}"><a href="{{ route('product.show', $p) }}">{{ $p->title }}</a></h3>
     <div class="price">
       <b>₹{{ number_format($p->price, 0) }}</b>
       @if($p->mrp && $p->mrp > $p->price)<s>₹{{ number_format($p->mrp, 0) }}</s>@endif

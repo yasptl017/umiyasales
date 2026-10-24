@@ -39,6 +39,11 @@ class Product extends Model
         return $this->status === 'sold_out';
     }
 
+    public function detailUrl(): string
+    {
+        return route('product.show', $this);
+    }
+
     public function whatsappUrl(): string
     {
         $tpl = Setting::get('whatsapp_message');
@@ -61,6 +66,9 @@ class Product extends Model
             '{mrp}' => number_format((float) $this->mrp, 0),
             '{link}' => (string) $this->product_url,
         ]);
+        $text .= "
+
+Product details: ".$this->detailUrl();
         return Setting::whatsappUrl($text);
     }
 }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ $site['shop_name'] ?? 'Umiya Sales' }} – {{ $site['tagline'] ?? '' }}</title>
+<title>@hasSection('title')@yield('title') – {{ $site['shop_name'] ?? 'Umiya Sales' }}@else{{ $site['shop_name'] ?? 'Umiya Sales' }} – {{ $site['tagline'] ?? '' }}@endif</title>
 <meta name="description" content="{{ $site['tagline'] ?? '' }}">
 <link rel="icon" href="{{ \App\Models\Setting::logoUrl() }}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap">

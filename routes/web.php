@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ShopController::class, 'index'])->name('shop');
 
+Route::get('/product/{product}', [ShopController::class, 'show'])->name('product.show');
+
 Route::get('/go/whatsapp', function () {
     $url = \App\Models\Setting::get('whatsapp_group');
     return $url ? redirect()->away($url) : redirect()->route('shop');
