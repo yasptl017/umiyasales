@@ -69,6 +69,7 @@
     <div>
       <b>{{ $site['shop_name'] }}</b><br>
       {{ $site['footer_text'] }}
+      @if(!empty($site['address']))<br><span class="foot-addr">{!! nl2br(e($site['address'])) !!}</span>@endif
     </div>
     <div>
       Contact: <b>{{ $site['contact_person'] }}</b><br>
