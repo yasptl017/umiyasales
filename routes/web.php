@@ -36,6 +36,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('password', [AuthController::class, 'password'])->name('password');
 
+    Route::get('products/search', [ProductController::class, 'search'])->name('products.search');
     Route::resource('products', ProductController::class)->except('show');
     Route::patch('products/{product}/status', [ProductController::class, 'status'])->name('products.status');
     Route::patch('products/{product}/today', [ProductController::class, 'today'])->name('products.today');

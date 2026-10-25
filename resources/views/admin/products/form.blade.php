@@ -1,6 +1,34 @@
 @extends('layouts.admin')
 @section('content')
 <h1>{{ $product->exists ? 'Edit Product' : 'Add Product' }}</h1>
+<div class="panel psearch">
+  <div class="bar" style="margin:0">
+    <input class="grow" type="search" id="psQ" placeholder="Search existing product to edit…" autocomplete="off">
+    <button class="btn ghost" type="button" id="psBtn">Search</button>
+  </div>
+  <div id="psRes" class="psres"></div>
+</div>
+<script>
+(function(){
+  var q=document.getElementById('psQ'),r=document.getElementById('psRes'),t,url="{{ route('admin.products.search') }}";
+  function run(){
+    var v=q.value.trim();if(!v){r.innerHTML='';return}
+    fetch(url+'?q='+encodeURIComponent(v),{headers:{'Accept':'application/json'}}).then(function(x){return x.json()}).then(function(a){
+      r.innerHTML='';
+      if(!a.length){r.textContent='No products found.';return}
+      a.forEach(function(p){
+        var l=document.createElement('a');l.href=p.url;
+        if(p.image){var i=document.createElement('img');i.src=p.image;l.appendChild(i)}
+        var s=document.createElement('span');s.textContent=p.title;l.appendChild(s);
+        var b=document.createElement('b');b.textContent=p.price;l.appendChild(b);
+        r.appendChild(l)});
+    });
+  }
+  q.addEventListener('input',function(){clearTimeout(t);t=setTimeout(run,250)});
+  q.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();run()}});
+  document.getElementById('psBtn').addEventListener('click',run);
+})();
+</script>
 <form class="panel" method="post" enctype="multipart/form-data"
       action="{{ $product->exists ? route('admin.products.update', $product) : route('admin.products.store') }}">
   @csrf

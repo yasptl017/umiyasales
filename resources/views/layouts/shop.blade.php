@@ -58,7 +58,7 @@
     </a>
     <button class="icon-btn search-toggle" type="button" id="searchBtn" aria-label="Search"><svg class="i"><use href="#i-search"/></svg></button>
     <form class="search" action="{{ route('shop') }}" method="get">
-      <input type="search" name="q" value="{{ request('q') }}" placeholder="Search products…">
+      <input type="search" name="q" value="" placeholder="{{ request('q') ? 'Showing: '.request('q') : 'Search products…' }}">
       <button class="icon-btn search-close" type="button" id="searchClose" aria-label="Close search"><svg class="i"><use href="#i-close"/></svg></button>
       <button class="btn" type="submit" aria-label="Search"><svg class="i"><use href="#i-search"/></svg></button>
     </form>

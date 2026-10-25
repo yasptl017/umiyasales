@@ -25,6 +25,21 @@ class ProductController extends Controller
         ]);
     }
 
+    public function search(Request $request)
+    {
+        $q = trim((string) $request->query('q', ''));
+        if ($q === '') {
+            return response()->json([]);
+        }
+
+        return response()->json(Product::where('title', 'like', "%{$q}%")->latest()->limit(10)->get()->map(fn ($p) => [
+            'title' => $p->title,
+            'price' => '₹' . number_format($p->price, 0),
+            'image' => $p->image_url,
+            'url' => route('admin.products.edit', $p),
+        ]));
+    }
+
     public function create()
     {
         return view('admin.products.form', ['product' => new Product(['status' => 'available']), 'categories' => Category::orderBy('name')->get()]);
