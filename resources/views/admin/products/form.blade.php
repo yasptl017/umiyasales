@@ -3,7 +3,7 @@
 <h1>{{ $product->exists ? 'Edit Product' : 'Add Product' }}</h1>
 <div class="panel psearch">
   <div class="bar" style="margin:0">
-    <input class="grow" type="search" id="psQ" placeholder="Search existing product to edit…" autocomplete="off">
+    <input class="sgrow" type="search" id="psQ" placeholder="Search existing product to edit…" autocomplete="off">
     <button class="btn ghost" type="button" id="psBtn">Search</button>
   </div>
   <div id="psRes" class="psres"></div>

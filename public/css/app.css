@@ -422,3 +422,4 @@ body.lb-open{overflow:hidden}
 .psres img{width:40px;height:40px;object-fit:cover;border-radius:8px}
 .psres span{flex:1}
 .psres{margin-top:6px}
+.bar .sgrow{flex:1 1 200px}

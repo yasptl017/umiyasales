@@ -2,7 +2,7 @@
 @section('content')
 <h1>Products</h1>
 <form class="bar" method="get">
-  <input class="grow" type="search" name="q" value="" placeholder="{{ request('q') ? 'Showing: '.request('q').' — search again…' : 'Search title…' }}" style="max-width:360px">
+  <input class="sgrow" type="search" name="q" value="" placeholder="{{ request('q') ? 'Showing: '.request('q').' — search again…' : 'Search title…' }}" style="max-width:360px">
   <select name="category" style="width:auto"><option value="">All categories</option>
     @foreach($categories as $c)<option value="{{ $c->id }}" @selected(request('category') == $c->id)>{{ $c->name }}</option>@endforeach
   </select>
