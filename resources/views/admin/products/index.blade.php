@@ -2,14 +2,15 @@
 @section('content')
 <h1>Products</h1>
 <form class="bar" method="get">
-  <input class="grow" type="search" name="q" value="" placeholder="{{ request('q') ? 'Showing: '.request('q').' — search again…' : 'Search title…' }}" style="max-width:260px">
+  <input class="grow" type="search" name="q" value="" placeholder="{{ request('q') ? 'Showing: '.request('q').' — search again…' : 'Search title…' }}" style="max-width:360px">
   <select name="category" style="width:auto"><option value="">All categories</option>
     @foreach($categories as $c)<option value="{{ $c->id }}" @selected(request('category') == $c->id)>{{ $c->name }}</option>@endforeach
   </select>
   <select name="status" style="width:auto"><option value="">All status</option>
     @foreach(\App\Models\Product::STATUSES as $k => $v)<option value="{{ $k }}" @selected(request('status') === $k)>{{ $v }}</option>@endforeach
   </select>
-  <button class="btn ghost" type="submit">Filter</button>
+  <button class="btn" type="submit"><svg class="i"><use href="#i-search"/></svg> Search</button>
+  @if(request()->hasAny(['q', 'category', 'status']))<a class="btn ghost" href="{{ route('admin.products.index') }}">Clear</a>@endif
   <span class="grow"></span>
   <a class="btn accent" href="{{ route('admin.products.create') }}">+ Add Product</a>
 </form>
