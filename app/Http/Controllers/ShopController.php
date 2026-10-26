@@ -10,6 +10,8 @@ class ShopController extends Controller
 {
     public function index(Request $request)
     {
+        $this->countVisitor($request);
+
         $q = trim((string) $request->query('q', ''));
         $slug = $request->query('category');
         $current = $slug ? Category::where('slug', $slug)->firstOrFail() : null;
@@ -42,6 +44,17 @@ class ShopController extends Controller
         })->filter(fn ($c) => $c->products->isNotEmpty());
 
         return view('shop.index', compact('today', 'categories', 'current', 'q', 'sections') + ['products' => null]);
+    }
+
+    /** Count each browser once (1-year cookie); skips ajax and bots. */
+    private function countVisitor(Request $request): void
+    {
+        if ($request->ajax() || $request->hasCookie('umiya_vid') || preg_match('/bot|crawl|spider|slurp|facebookexternalhit|preview/i', (string) $request->userAgent())) {
+            return;
+        }
+        \App\Models\Setting::firstOrCreate(['key' => 'visitor_count'], ['value' => '0']);
+        \App\Models\Setting::where('key', 'visitor_count')->increment('value');
+        \Illuminate\Support\Facades\Cookie::queue('umiya_vid', '1', 60 * 24 * 365);
     }
 
     public function show(Product $product)

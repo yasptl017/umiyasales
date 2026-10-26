@@ -46,6 +46,7 @@
       <a class="dnav sub {{ request('category') === $mc->slug ? 'on' : '' }}" href="{{ route('shop', ['category' => $mc->slug]) }}">{{ $mc->name }} <span class="cnt">({{ $mc->products_count }})</span></a>
     @endforeach
   @endif
+  <div class="visitors"><svg class="i"><use href="#i-users"/></svg><span>Visitors<b>{{ number_format((int) ($site['visitor_count'] ?? 0)) }}</b></span></div>
   <a class="btn wa" style="margin:16px" href="{{ \App\Models\Setting::whatsappUrl('Hi '.$site['contact_person'].', I have a query.') }}" target="_blank" rel="noopener">Chat on WhatsApp</a>
 </aside>
 
