@@ -11,7 +11,7 @@ class Product extends Model
 {
     public const STATUSES = ['available' => 'Available', 'sold_out' => 'Sold Out', 'unavailable' => 'Unavailable'];
 
-    protected $fillable = ['title', 'description', 'image', 'product_url', 'mrp', 'price', 'status', 'is_today', 'today_at'];
+    protected $fillable = ['title', 'description', 'image', 'product_url', 'mrp', 'price', 'qty', 'status', 'is_today', 'today_at'];
 
     protected $casts = ['is_today' => 'boolean', 'today_at' => 'datetime', 'mrp' => 'float', 'price' => 'float'];
 

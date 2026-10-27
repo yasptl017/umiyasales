@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('products', ProductController::class)->except('show');
     Route::patch('products/{product}/status', [ProductController::class, 'status'])->name('products.status');
     Route::patch('products/{product}/today', [ProductController::class, 'today'])->name('products.today');
+
+    Route::get('stock', [StockController::class, 'index'])->name('stock');
+    Route::post('stock', [StockController::class, 'update'])->name('stock.update');
 
     Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
 

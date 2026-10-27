@@ -15,8 +15,8 @@ class DashboardController extends Controller
             'products' => Product::count(),
             'available' => Product::where('status', 'available')->count(),
             'soldOut' => Product::where('status', 'sold_out')->count(),
-            'totalPrice' => (float) Product::sum('price'),
-            'totalMrp' => (float) Product::sum('mrp'),
+            'totalQty' => (int) Product::sum('qty'),
+            'totalPrice' => (float) Product::selectRaw('COALESCE(SUM(price * qty), 0) as t')->value('t'),
             'recent' => Product::with('categories')->latest()->limit(5)->get(),
         ]);
     }
