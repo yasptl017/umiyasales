@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class StockController extends Controller
 {
@@ -23,6 +24,10 @@ class StockController extends Controller
 
     public function update(Request $request)
     {
+        if (! Schema::hasColumn('products', 'qty')) {
+            return back()->withErrors(['qty' => 'Database is not updated yet: run "php artisan migrate" on the server to add the qty column.']);
+        }
+
         $data = $request->validate([
             'qty' => 'required|array',
             'qty.*' => 'nullable|integer|min:0|max:1000000',
