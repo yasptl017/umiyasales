@@ -66,6 +66,21 @@ class Setting extends Model
         self::$cache = null;
     }
 
+    /** Split the shop name into [first part, second part] for the two-colour heading. "brandclick.in" -> ["brandclick", ".in"]. */
+    public static function brandParts(string $name): array
+    {
+        $name = trim($name);
+        if (str_contains($name, ' ')) {
+            return explode(' ', $name, 2);
+        }
+        $dot = strrpos($name, '.');
+        if ($dot !== false && $dot > 0) {
+            return [substr($name, 0, $dot), substr($name, $dot)];
+        }
+
+        return [$name, ''];
+    }
+
     public static function logoUrl(): string
     {
         $logo = self::all_()['logo'] ?? '';

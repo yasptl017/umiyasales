@@ -34,7 +34,7 @@
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="drawer" aria-label="Menu">
   <div class="drawer-h">
-    <a class="brand" href="{{ route('shop') }}"><img src="{{ \App\Models\Setting::logoUrl() }}" alt=""><span class="brand-name">@php($w = explode(' ', trim($site['shop_name']), 2))<b class="a">{{ $w[0] }}</b>@if(!empty($w[1]))<b class="b">{{ $w[1] }}</b>@endif</span></a>
+    <a class="brand" href="{{ route('shop') }}"><img src="{{ \App\Models\Setting::logoUrl() }}" alt=""><span class="brand-name">@php($w = \App\Models\Setting::brandParts($site['shop_name']))<b class="a">{{ $w[0] }}</b>@if(!empty($w[1]))<b class="b{{ str_starts_with($w[1], '.') ? ' dot' : '' }}">{{ $w[1] }}</b>@endif</span></a>
     <button class="icon-btn" type="button" data-close aria-label="Close menu"><svg class="i"><use href="#i-close"/></svg></button>
   </div>
   <a class="dnav {{ request()->routeIs('shop') && !request('category') ? 'on' : '' }}" href="{{ route('shop') }}"><svg class="i"><use href="#i-home"/></svg><span>Home</span></a>
@@ -55,7 +55,7 @@
     <button class="icon-btn" type="button" id="menuBtn" aria-label="Open menu" aria-controls="drawer"><svg class="i"><use href="#i-menu"/></svg></button>
     <a class="brand" href="{{ route('shop') }}">
       <img src="{{ \App\Models\Setting::logoUrl() }}" alt="{{ $site['shop_name'] }}">
-      <span class="brand-name">@php($w = explode(' ', trim($site['shop_name']), 2))<b class="a">{{ $w[0] }}</b>@if(!empty($w[1]))<b class="b">{{ $w[1] }}</b>@endif</span>
+      <span class="brand-name">@php($w = \App\Models\Setting::brandParts($site['shop_name']))<b class="a">{{ $w[0] }}</b>@if(!empty($w[1]))<b class="b{{ str_starts_with($w[1], '.') ? ' dot' : '' }}">{{ $w[1] }}</b>@endif</span>
     </a>
     <button class="icon-btn search-toggle" type="button" id="searchBtn" aria-label="Search"><svg class="i"><use href="#i-search"/></svg></button>
     <form class="search" action="{{ route('shop') }}" method="get">
