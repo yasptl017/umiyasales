@@ -369,7 +369,8 @@ body.lb-open{overflow:hidden}
 /* brand name typography */
 .brand-name{font-family:Poppins,Inter,system-ui,sans-serif;display:inline-flex;align-items:baseline;gap:6px;white-space:nowrap;line-height:1}
 .brand-name b{display:inline!important;font-family:inherit;font-size:24px!important;font-weight:800;letter-spacing:-.6px;line-height:1}
-.brand-name{--brand-a:#0b4a9c;--brand-b:#ff7a0a}
+.brand-name{--brand-a:#0b4a9c;--brand-b:#ff7a0a;--brand-c:#0a6bd1}
+.brand-name .c{color:var(--brand-c)!important}
 .brand-name .a{color:var(--brand-a)!important}
 .brand-name .b{color:var(--brand-b)!important;position:relative}
 .brand-name .b.dot{margin-left:-6px}

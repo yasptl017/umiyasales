@@ -70,6 +70,10 @@ class Setting extends Model
     public static function brandParts(string $name): array
     {
         $name = trim($name);
+        // "brandclick.in" -> ["brand", "click", ".in"] (three colours, like the logo)
+        if (preg_match('/^(.+?)(click)(\.[a-z0-9.]+)?$/i', $name, $m) && ! str_contains($name, ' ')) {
+            return array_values(array_filter([$m[1], $m[2], $m[3] ?? ''], fn ($p) => $p !== ''));
+        }
         if (str_contains($name, ' ')) {
             return explode(' ', $name, 2);
         }
